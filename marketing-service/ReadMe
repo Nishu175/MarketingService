@@ -1,0 +1,85 @@
+First we need to create Client/account which will create campaign.
+curl --location --request POST 'localhost:8080/clients' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "name":"BRTesting",
+    "accountId":"1234",
+    "passcode":"dfdsffd"
+}'
+
+Create users to which client will send mails
+curl --location --request POST 'localhost:8080/users' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "name":"nishu",
+    "email":"abc1@gmail.com",
+    "phone":"+918000889123"
+}'
+
+Create Provider which will send emails
+curl --location --request POST 'localhost:8080/providers/email' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "providerName":"Sendbird",
+    "nickName":"1234",
+    "callbackUrl":"http://localhot:8080/recordCb",
+    "host":"127.0.0.1",
+    "port":8787,
+    "apiKey":"key123",
+    "fromAddress" : "BRTesting@gmail.com",
+    "replyAddress" : "noreply@abc.com",
+    "createdBy":1,
+    "userName":"avc",
+    "password":"password"
+
+}'
+
+Create campaign
+curl --location --request POST 'localhost:8080/campaigns' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "campaignName": "test email",
+    "campaignDescription": "test campaignDescription",
+    "campaignType": "LIVE",
+    "channel": "EMAIL",
+    "frequencyType": "ONETIME",
+    "providerId": 2,
+    "createdBy": 1,
+    "message": {
+        "body": "test body",
+        "messageType": "PROMOTIONAL",
+        "subject": "test subject",
+        "ccList":["dd","fd"],
+        "bccList":["ers","reds"]
+
+    },
+    "subscribers": [
+        {
+            "name": "a1er",
+            "email": "abc@gmail.com"
+
+        },
+        {
+            "name": "a2er",
+            "email": "abc2@gmail.com"
+        },
+        {
+            "name": "a254",
+            "email": "abc2@gmail.com"
+        },
+        {
+            "name": "a54",
+            "email": "abc2@gmail.com"
+        }
+    ]
+}'
+
+Send Email
+curl --location --request PATCH 'localhost:8080/campaigns/102/send?clientId=1' \
+--header 'Content-Type: application/json' \
+--data-raw ''
+
+Get Campaign List
+curl --location --request GET 'localhost:8080/campaigns?clientId=1&sortDir=desc&sortBy=campaignId&page=0&size=10'
+
+
